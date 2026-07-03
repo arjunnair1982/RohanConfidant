@@ -527,8 +527,6 @@
   </div>
 
   <script>
-    var API_KEY = 'YOUR_ANTHROPIC_API_KEY';
-
     let history = [];
     let traits = [];
 
@@ -654,35 +652,20 @@ Only output your natural response, followed by the TRAITS line at the very end. 
       }
     });
 
-    // Anthropic API Call
     async function callAnthropic(system, messages, maxTokens) {
-      if (API_KEY === 'YOUR_ANTHROPIC_API_KEY') {
-        throw new Error("Please set your Anthropic API key in the script.");
-      }
-
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: maxTokens,
-          system: system,
-          messages: messages
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ system, messages, maxTokens })
       });
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.error?.message || 'API request failed');
+        throw new Error(err.error || 'API request failed');
       }
 
       const data = await response.json();
-      return data.content[0].text;
+      return data.content;
     }
 
     function parseJsonOutput(str) {
@@ -750,7 +733,7 @@ Output MUST be ONLY a valid JSON object with the format: {"setup":"...","punchli
 
       } catch (err) {
         console.error(err);
-        alert(err.message === "Please set your Anthropic API key in the script." ? err.message : 'Failed to generate joke. Check console.');
+        alert('Failed to generate joke. Check console.');
       } finally {
         toggleLoading(['btn-joke-normal', 'btn-joke-wild'], false);
       }
@@ -791,7 +774,7 @@ Output MUST be ONLY a valid JSON object with the format: {"headline":"...","body
 
       } catch (err) {
         console.error(err);
-        alert(err.message === "Please set your Anthropic API key in the script." ? err.message : 'Failed to generate advice. Check console.');
+        alert('Failed to generate advice. Check console.');
       } finally {
         toggleLoading(['btn-advice-normal', 'btn-advice-surprise'], false);
       }
