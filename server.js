@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post("/chat", async (req, res) => {
+app.post(["/chat", "/api/chat"], async (req, res) => {
   if (!process.env.ANTHROPIC_API_KEY) {
     return res.status(500).json({ error: "Server missing ANTHROPIC_API_KEY" });
   }
