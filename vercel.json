@@ -8,7 +8,6 @@
   ],
   "routes": [
     { "src": "/chat", "dest": "server.js" },
-    { "src": "/session", "dest": "server.js" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/session", "dest": "server.js" }
   ]
 }
