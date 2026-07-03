@@ -1,13 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 // Load environment variables from .env file
 dotenv.config();
 
 const app = express();
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Serve the static files in the current directory (like index.html)
-app.use(express.static("."));
+// Serve the static files in the project root (like index.html)
+app.use(express.static(__dirname));
 
 // Parse raw SDP payloads posted from the browser
 app.use(express.text({ type: ["application/sdp", "text/plain"] }));
